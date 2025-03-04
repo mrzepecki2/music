@@ -16,8 +16,8 @@
       </div>
 
       <a :href="album.link.attributes.href" target="_blank"
-        class="absolute top-4 right-4 bg-green-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <ArrowRightCircleIcon class="w-6 h-6" />
+        class="absolute top-4 right-4 bg-green-500 text-black p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <ArrowRightCircleIcon class="w-6 h-6 text-black" />
       </a>
 
       <div

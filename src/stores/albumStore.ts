@@ -36,32 +36,42 @@ export const useAlbumStore = defineStore('albumStore', () => {
     return Array.from(uniqueTerms)
   })
 
+  const matchesSearchQuery = (album: Album): boolean => {
+    const search = searchQuery.value.toLowerCase()
+    return (
+      album['im:name'].label.toLowerCase().includes(search) ||
+      album['im:artist'].label.toLowerCase().includes(search)
+    )
+  }
+  
+  const matchesGenres = (album: Album): boolean => {
+    return selectedTerms.value.length === 0 || selectedTerms.value.includes(album.category?.attributes?.term)
+  }
+  
+  const sortAlbums = (a: Album, b: Album): number => {
+    switch (sortBy.value) {
+      case SortBy.NEWEST:
+        return new Date(b['im:releaseDate'].label).getTime() - new Date(a['im:releaseDate'].label).getTime()
+      case SortBy.OLDEST:
+        return new Date(a['im:releaseDate'].label).getTime() - new Date(b['im:releaseDate'].label).getTime()
+      case SortBy.PRICE_ASC:
+        return parseFloat(a['im:price'].attributes.amount) - parseFloat(b['im:price'].attributes.amount)
+      case SortBy.PRICE_DESC:
+        return parseFloat(b['im:price'].attributes.amount) - parseFloat(a['im:price'].attributes.amount)
+      case SortBy.LIKED:
+        const isALiked = likedAlbumIds.value.includes(a.id.label)
+        const isBLiked = likedAlbumIds.value.includes(b.id.label)
+        return isBLiked ? 1 : isALiked ? -1 : 0
+      case SortBy.POPULAR:
+      default:
+        return 0
+    }
+  }
+
   const filteredAlbums = computed<Album[]>(() => {
     return albums.value
-      .filter((album: Album) => {
-        const matchesSearch = album['im:name'].label.toLowerCase().includes(searchQuery.value.toLowerCase())
-        const matchesGenres = selectedTerms.value.length === 0 || selectedTerms.value.includes(album.category?.attributes?.term)
-        return matchesSearch && matchesGenres
-      })
-      .sort((a: Album, b: Album) => {
-        switch (sortBy.value) {
-          case SortBy.NEWEST:
-            return new Date(b['im:releaseDate'].label).getTime() - new Date(a['im:releaseDate'].label).getTime()
-          case SortBy.OLDEST:
-            return new Date(a['im:releaseDate'].label).getTime() - new Date(b['im:releaseDate'].label).getTime()
-          case SortBy.PRICE_ASC:
-            return parseFloat(a['im:price'].attributes.amount) - parseFloat(b['im:price'].attributes.amount)
-          case SortBy.PRICE_DESC:
-            return parseFloat(b['im:price'].attributes.amount) - parseFloat(a['im:price'].attributes.amount)
-          case SortBy.LIKED:
-            const isALiked = likedAlbumIds.value.includes(a.id.label)
-            const isBLiked = likedAlbumIds.value.includes(b.id.label)
-            return isBLiked ? 1 : isALiked ? -1 : 0
-          case SortBy.POPULAR:
-          default:
-            return 0
-        }
-      })
+      .filter((album: Album) => matchesSearchQuery(album) && matchesGenres(album)) // Filtracja
+      .sort(sortAlbums)
   })
 
 
@@ -79,7 +89,6 @@ export const useAlbumStore = defineStore('albumStore', () => {
   })
 
   const resetQuery = (): void => {
-    console.log('ssssss')
     searchQuery.value = ''
   }
 
