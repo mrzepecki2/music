@@ -28,7 +28,7 @@ export const useAlbumStore = defineStore('albumStore', () => {
   }
 
 
-  const terms = computed(() => {
+  const terms = computed<string[]>(() => {
     const uniqueTerms = new Set<string>()
     albums.value.forEach((album: Album) => {
       if (album.category?.attributes?.term) uniqueTerms.add(album.category.attributes.term)
@@ -36,7 +36,7 @@ export const useAlbumStore = defineStore('albumStore', () => {
     return Array.from(uniqueTerms)
   })
 
-  const filteredAlbums = computed(() => {
+  const filteredAlbums = computed<Album[]>(() => {
     return albums.value
       .filter((album: Album) => {
         const matchesSearch = album['im:name'].label.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -72,12 +72,16 @@ export const useAlbumStore = defineStore('albumStore', () => {
     } else {
       likedAlbumIds.value.splice(index, 1)
     }
-    console.log(likedAlbumIds.value)
   }
 
   const isLiked = computed(() => {
     return (albumId: string) => likedAlbumIds.value.includes(albumId)
   })
+
+  const resetQuery = (): void => {
+    console.log('ssssss')
+    searchQuery.value = ''
+  }
 
   return {
     albums,
@@ -92,10 +96,11 @@ export const useAlbumStore = defineStore('albumStore', () => {
     likedAlbumIds,
     toggleLike,
     isLiked,
+    resetQuery,
   }
 }, {
   persist: {
     storage: localStorage,
-    pick: ['likedAlbumIds'],
+    pick: ['likedAlbumIds', 'selectedTerms', 'likedAlbumIds'],
   },
 })

@@ -4,9 +4,13 @@
       <div v-if="albums.length === 0 && !loading" class="text-center text-xl">Nie znaleziono atrybutów</div>
 
       <div class="flex mb-4 space-x-4">
-        <div class="flex-1">
-          <input v-model="searchQuery" type="text" placeholder="Search for albums..."
+        <div class="flex-1 relative">
+          <input v-model="searchQuery" type="text" placeholder="Szukaj albumu..."
             class="w-full p-3 rounded-md border border-gray-300 shadow-md focus:ring-2 focus:ring-blue-500" />
+            <button @click="resetQuery" v-if="searchQuery"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors duration-200">
+            <XMarkIcon class="w-4 h-4" />
+          </button>
         </div>
 
         <GenreFilter :terms="terms" :selectedTerms="selectedTerms" @update:selectedTerms="updateSelectedTerms" />
@@ -42,9 +46,11 @@ import { storeToRefs } from 'pinia'
 import AlbumCard from '@/components/AlbumCard.vue'
 import GenreFilter from '@/components/GenreFilter.vue'
 import SortFilter from '@/components/SortFilter.vue'
+import { XMarkIcon } from '@heroicons/vue/20/solid'
 
 const albumStore = useAlbumStore()
 
+const { resetQuery } = albumStore
 
 const { loading, albums, searchQuery, filteredAlbums, terms, selectedTerms } = storeToRefs(albumStore)
 
