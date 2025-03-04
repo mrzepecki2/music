@@ -53,6 +53,10 @@ export const useAlbumStore = defineStore('albumStore', () => {
             return parseFloat(a['im:price'].attributes.amount) - parseFloat(b['im:price'].attributes.amount)
           case SortBy.PRICE_DESC:
             return parseFloat(b['im:price'].attributes.amount) - parseFloat(a['im:price'].attributes.amount)
+          case SortBy.LIKED:
+            const isALiked = likedAlbumIds.value.includes(a.id.label)
+            const isBLiked = likedAlbumIds.value.includes(b.id.label)
+            return isBLiked ? 1 : isALiked ? -1 : 0
           case SortBy.POPULAR:
           default:
             return 0
