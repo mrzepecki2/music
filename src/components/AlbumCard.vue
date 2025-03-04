@@ -1,10 +1,10 @@
 <template>
   <div
-    class="bg-black text-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:scale-105 h-full group">
-    <div class="relative overflow-hidden">
+    class="bg-black text-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:scale-105 h-full group border border-gray-700">
+    <div class="relative overflow-hidden rounded-lg">
       <img :src="album['im:image'][2].label" alt="Album cover"
         class="w-full h-72 object-cover transition-all duration-300 group-hover:scale-105 group-hover:blur-0.5" />
-      <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 rounded-lg"></div>
 
       <div class="absolute top-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <HeartIcon
