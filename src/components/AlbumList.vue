@@ -19,8 +19,8 @@
           <div class="sm:flex-1 hidden md:block mt-4 md:mt-0 sm:text-right">
             <div class="flex gap-2 justify-end">
               <GenreFilter :terms="terms" :selectedTerms="selectedTerms" @update:selectedTerms="updateSelectedTerms" />
-              <SortFilter />
-              <GroupFilter />
+              <SortFilter class="p-3"/>
+              <GroupFilter class="p-3" />
             </div>
           </div>
         </div>
@@ -35,8 +35,8 @@
 
         <div v-if="filtersVisible" class="sm:hidden mt-4">
           <GenreFilter :terms="terms" :selectedTerms="selectedTerms" @update:selectedTerms="updateSelectedTerms" />
-          <SortFilter />
-          <GroupFilter />
+          <SortFilter class="mt-2 p-1" />
+          <GroupFilter class="mt-2 p-1" />
         </div>
       </div>
 
@@ -103,7 +103,7 @@ onMounted(() => {
   albumStore.loadAlbums()
 })
 
-const filtersVisible = ref(false)
+const filtersVisible = ref<boolean>(false)
 
 const toggleFilters = () => {
   filtersVisible.value = !filtersVisible.value

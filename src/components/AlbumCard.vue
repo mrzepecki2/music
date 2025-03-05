@@ -50,6 +50,8 @@ const albumStore = useAlbumStore()
 const isLiked = computed(() => albumStore.isLiked(props.album.id.label))
 
 const toggleLike = (albumId: string) => {
+  if (!albumId) 
+    return
   albumStore.toggleLike(albumId)
 }
 </script>

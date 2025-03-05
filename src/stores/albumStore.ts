@@ -90,7 +90,7 @@ export const useAlbumStore = defineStore('albumStore', () => {
   })
 
   const groupAlbums = computed(() => {
-    if (groupBy.value === GroupBy.NONE) return [filteredAlbums.value]
+    if (groupBy.value === null) return [filteredAlbums.value]
     
     const grouped: Record<string, Album[]> = {}
   
@@ -142,6 +142,6 @@ export const useAlbumStore = defineStore('albumStore', () => {
 }, {
   persist: {
     storage: localStorage,
-    pick: ['likedAlbumIds', 'selectedTerms', 'likedAlbumIds'],
+    pick: ['likedAlbumIds', 'selectedTerms', 'groupBy'],
   },
 })
