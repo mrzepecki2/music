@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Album } from '@/types/album'
-import { SortBy } from '@/types/enums'
+import { SortBy, GroupBy } from '@/types/enums'
 
 export const useAlbumStore = defineStore('albumStore', () => {
   const albums = ref<Album[]>([])
@@ -11,6 +11,7 @@ export const useAlbumStore = defineStore('albumStore', () => {
   const selectedTerms = ref<string[]>([])
   const sortBy = ref<SortBy>(SortBy.POPULAR)
   const likedAlbumIds = ref<string[]>([])
+  const groupBy = ref<GroupBy | null>(null)
 
   const loadAlbums = async () => {
     loading.value = true
@@ -39,8 +40,8 @@ export const useAlbumStore = defineStore('albumStore', () => {
   const matchesSearchQuery = (album: Album): boolean => {
     const search = searchQuery.value.toLowerCase()
     return (
-      album['im:name'].label.toLowerCase().includes(search) ||
-      album['im:artist'].label.toLowerCase().includes(search)
+      album['im:name']?.label.toLowerCase().includes(search) ||
+      album['im:artist']?.label.toLowerCase().includes(search)
     )
   }
   
@@ -88,6 +89,35 @@ export const useAlbumStore = defineStore('albumStore', () => {
     return (albumId: string) => likedAlbumIds.value.includes(albumId)
   })
 
+  const groupAlbums = computed(() => {
+    if (groupBy.value === GroupBy.NONE) return [filteredAlbums.value]
+    
+    const grouped: Record<string, Album[]> = {}
+  
+    const groupByMap: Record<GroupBy, (album: Album) => string> = {
+      [GroupBy.GENRE]: (album) => album.category?.attributes?.term || 'Inne',
+      [GroupBy.ARTIST]: (album) => album['im:artist'].label,
+      [GroupBy.PRICE_RANGE]: (album) => {
+        const price = parseFloat(album['im:price'].attributes.amount)
+        if (price < 5) return '0-5$'
+        if (price < 10) return '5-10$'
+        return '10$+'
+      }
+    }
+  
+    const groupKeyFunction = groupByMap[groupBy.value]
+    
+    if (groupKeyFunction) {
+      filteredAlbums.value.forEach((album) => {
+        const key = groupKeyFunction(album)
+        if (!grouped[key]) grouped[key] = []
+        grouped[key].push(album)
+      })
+    }
+  
+    return Object.entries(grouped).map(([group, albums]) => ({ group, albums }))
+  })
+
   const resetQuery = (): void => {
     searchQuery.value = ''
   }
@@ -106,6 +136,8 @@ export const useAlbumStore = defineStore('albumStore', () => {
     toggleLike,
     isLiked,
     resetQuery,
+    groupAlbums,
+    groupBy
   }
 }, {
   persist: {

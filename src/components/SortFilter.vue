@@ -1,5 +1,6 @@
 <template>
-  <select v-model="sortBy" class="p-3 rounded-md border border-gray-300 shadow-md focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
+  <select v-model="sortBy"
+    class="p-3 rounded-md border border-gray-300 shadow-md focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
     <option :value="SortBy.POPULAR">Od najpopularniejszych</option>
     <option :value="SortBy.NEWEST">Od najnowszych</option>
     <option :value="SortBy.OLDEST">Od najstarszych</option>
@@ -15,6 +16,5 @@ import { useAlbumStore } from '@/stores/albumStore'
 import { SortBy } from '@/types/enums'
 
 const albumStore = useAlbumStore()
-
 const { sortBy } = storeToRefs(albumStore)
 </script>

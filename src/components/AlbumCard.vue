@@ -1,6 +1,7 @@
 <template>
   <div
-    class="bg-black text-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:scale-105 h-full group border border-gray-700">
+    class="bg-black text-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:scale-105 h-full group border border-gray-700"
+  >
     <div class="relative overflow-hidden rounded-lg">
       <img :src="album['im:image'][2].label" alt="Album cover"
         class="w-full h-72 object-cover transition-all duration-300 group-hover:scale-105 group-hover:blur-0.5" />

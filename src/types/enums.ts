@@ -4,5 +4,11 @@ export enum SortBy {
   OLDEST = 'oldest',
   PRICE_ASC = 'priceAsc',
   PRICE_DESC = 'priceDesc',
-  FAVOURITE =  'favourite'
+  LIKED =  'liked'
+}
+
+export enum GroupBy {
+  GENRE = 'genre',
+  ARTIST = 'artist',
+  PRICE_RANGE = 'price',
 }
